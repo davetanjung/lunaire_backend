@@ -14,8 +14,59 @@ datasource db {
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
-  username String @unique
-  email    String @unique
-  password String
+  id         Int        @id @default(autoincrement())
+  username   String     @db.VarChar(100)
+  email      String     @unique @db.VarChar(150)
+  password   String     @db.VarChar(100)
+  token      String?    @db.VarChar(100)
+  activities Activity[]
+  sounds     Sound[]
+  diaries    Diary[]
+
+  @@map("users")
+}
+
+model Activity {
+  id         Int      @id @default(autoincrement())
+  name       String   @db.VarChar(255)
+  start_time DateTime @db.Timestamp(0)
+  end_time   DateTime @db.Timestamp(0)
+  date       DateTime @db.Date
+  userId     Int // Foreign key field
+  user       User     @relation(fields: [userId], references: [id]) // Define relation
+  categoryId Int // Foreign key
+  category   Category @relation(fields: [categoryId], references: [id]) // Define relation
+
+  @@map("activities")
+}
+
+model Category {
+  id         Int        @id @default(autoincrement())
+  name       String @unique     @db.VarChar(255)
+  activities Activity[]
+
+  @@map("categories")
+}
+
+model Diary {
+  id          Int      @id @default(autoincrement())
+  bed_time    DateTime @db.Timestamp(0)
+  wake_time   DateTime @db.Timestamp(0)
+  sleep_hours Float
+  mood        String
+  entry_date  DateTime @db.Date
+  userId      Int 
+  user        User     @relation(fields: [userId], references: [id]) 
+
+  @@map("diaries")
+}
+
+model Sound {
+  id        Int    @id @default(autoincrement())
+  name      String @db.VarChar(255)
+  file_path String @db.VarChar(255)
+  userId    Int 
+  user      User   @relation(fields: [userId], references: [id])
+
+  @@map("sounds")
 }

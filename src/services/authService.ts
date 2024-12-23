@@ -1,7 +1,7 @@
-import { randomUUID } from "crypto";
+import { v4 as uuidv4 } from 'uuid';
 import { prismaClient } from "../applications/database";
 import { ResponseError } from "../error/response-error";
-import { LoginUserRequest, toUserResponse, UserRegisterRequest, UserRegisterResponse } from "../models/User";
+import { LoginUserRequest, RegisterUserRequest, toUserResponse, UserResponse } from "../models/User";
 import { userValidation } from "../validations/user-validation";
 import { Validation } from "../validations/validation";
 import bcrypt from "bcrypt";
@@ -9,8 +9,8 @@ import { User } from "@prisma/client";
 
 export class authService {
 
-    static async register(req: UserRegisterRequest): Promise<UserRegisterResponse> {
-
+    static async register(req: RegisterUserRequest): Promise<UserResponse> {
+        // validate request
         const registerReq = Validation.validate(
             userValidation.REGISTER,
             req
@@ -22,7 +22,7 @@ export class authService {
             }
         })
 
-        if (email) {
+        if(email){ 
             throw new ResponseError(400, "Email already exist")
         }
 
@@ -33,15 +33,15 @@ export class authService {
                 username: registerReq.username,
                 email: registerReq.email,
                 password: registerReq.password,
+                token: uuidv4()
             }
         })
-
 
         return toUserResponse(user)
 
     }
 
-    static async login(request: LoginUserRequest): Promise<UserRegisterResponse>{
+    static async login(request: LoginUserRequest): Promise<UserResponse>{
 
         const loginRequest = Validation.validate(userValidation.LOGIN, request)
 
@@ -65,14 +65,14 @@ export class authService {
         }
 
         // Token diupdate karena setiap user beroperasi token harus baru demi safety
-        // user = await prismaClient.user.update({
-        //     where: {
-        //         id: user.id,
-        //     },
-        //     data: {
-        //         token: uuid()
-        //     }
-        // })
+        user = await prismaClient.user.update({
+            where: {
+                id: user.id,
+            },
+            data: {
+                token: uuidv4()
+            }
+        })
 
         const response = toUserResponse(user)
 
@@ -80,18 +80,18 @@ export class authService {
 
     }
 
-    // static async logout(user: User): Promise<string>{
+    static async logout(user: User): Promise<string>{
           
-    //     await prismaClient.user.update({
-    //         where: {
-    //             id: user.id,
-    //         },
-    //         data:{
-    //             token: null
-    //         }
-    //     })
+        await prismaClient.user.update({
+            where: {
+                id: user.id,
+            },
+            data:{
+                token: null
+            }
+        })
 
-    //     return "Logout succesful!"
-    // }
+        return "Logout succesful!"
+    }
 
 }

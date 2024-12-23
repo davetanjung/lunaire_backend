@@ -1,14 +1,14 @@
 import { User } from "@prisma/client";
 
-export interface UserRegisterRequest {
+export interface RegisterUserRequest {
     username: string;
-    email: string;
     password: string;
+    email: string;
 }
 
-export interface UserRegisterResponse {
-    email: string;
-    password: string;
+export interface UserResponse {
+    token? : string;
+    username: string;
 }
 
 export interface LoginUserRequest {
@@ -16,9 +16,16 @@ export interface LoginUserRequest {
     password: string;
 }
 
+export interface UserListResponse {
+    id: string;
+    username: string;
+    email: string;
+}
+
+
 export function toUserResponse (user: User) {
     return {
-        email: user.email,
-        password: user.password
+        token: user.token ?? "",
+        username: user.username,
     }
 }
