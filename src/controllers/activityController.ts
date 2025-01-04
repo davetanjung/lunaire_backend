@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { CreateActivityRequest, DeleteActivityRequest, ReadActivityResponse, UpdateActivityRequest } from "../models/Activity";
+import { CreateActivityRequest, DeleteActivityRequest, ReadActivityResponse, ReadUserActivitiesResponse, UpdateActivityRequest } from "../models/Activity";
 import { activityService } from "../services/activity-service";
 
 export class activityController {
@@ -25,6 +25,19 @@ export class activityController {
                 data: response
             });
         } catch (error) {
+            next(error);
+        }
+    }
+
+    static async getUserActivities(req: Request, res: Response, next: NextFunction) {
+        try{
+            const userId: number = Number(req.params.userId);
+            const response: ReadUserActivitiesResponse[] = await activityService.getUserActivities(userId);
+
+            res.status(201).json({
+                data: response
+            })
+        } catch (error){
             next(error);
         }
     }

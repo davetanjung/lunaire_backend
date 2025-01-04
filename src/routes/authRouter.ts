@@ -16,6 +16,7 @@ router.post("/logout", authController.logout);
 // activity
 router.post("/api/activity", activityController.createActivity)
 router.get("/api/activity", activityController.getAllActivity)
+router.get("/api/activity/:userId", activityController.getUserActivities)
 router.put("/api/activity", activityController.updateActivity)
 router.delete("/api/activity", activityController.deleteActivity)
 

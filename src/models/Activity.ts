@@ -34,5 +34,15 @@ export interface ReadActivityResponse {
     };
 }
 
+export interface ReadUserActivitiesResponse {
+   name: string;
+   start_time: string;
+    end_time: string;
+    date: string;
+    category: {
+        name: string;
+    };
+}
+
 
   

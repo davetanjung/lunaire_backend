@@ -1,5 +1,5 @@
 import { prismaClient } from "../applications/database";
-import { CreateActivityRequest, DeleteActivityRequest, ReadActivityResponse, UpdateActivityRequest } from "../models/Activity";
+import { CreateActivityRequest, DeleteActivityRequest, ReadActivityResponse, ReadUserActivitiesResponse, UpdateActivityRequest } from "../models/Activity";
 import { activityValidation } from "../validations/activity-validation";
 import { Validation } from "../validations/validation";
 
@@ -48,6 +48,31 @@ export class activityService {
                 },
             };
         });
+
+        return response;
+    }
+
+    static async getUserActivities(userId: number): Promise<ReadUserActivitiesResponse[]> {
+        const activities = await prismaClient.activity.findMany({
+            where: {
+                userId: userId,
+            },
+            include: {
+                category: true,
+            }
+        });
+
+        const response = activities.map((activity) => {
+            return {
+                name: activity.name,
+                start_time: activity.start_time.toISOString(),
+                end_time: activity.end_time.toISOString(),
+                date: activity.date.toISOString(),
+                category: {
+                    name: activity.category?.name ?? "Uncategorized",
+                },
+            }
+        })
 
         return response;
     }
