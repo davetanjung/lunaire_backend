@@ -7,6 +7,7 @@ export interface RegisterUserRequest {
 }
 
 export interface UserResponse {
+    id: number;
     token? : string;
     username: string;
 }
@@ -25,6 +26,7 @@ export interface UserListResponse {
 
 export function toUserResponse (user: User) {
     return {
+        id: user.id,
         token: user.token ?? "",
         username: user.username,
     }
