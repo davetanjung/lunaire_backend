@@ -11,7 +11,12 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+<<<<<<< Updated upstream
     "@prisma/client": "^6.0.0",
+=======
+    "@prisma/client": "^6.1.0",
+    "async": "^3.2.6",
+>>>>>>> Stashed changes
     "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
     "express": "^4.21.1",
