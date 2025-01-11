@@ -17,9 +17,11 @@ router.post("/logout", authController.logout);
 // activity
 router.post("/api/activity", activityController.createActivity)
 router.get("/api/activity", activityController.getAllActivity)
-router.get("/api/activity/:userId", activityController.getUserActivities)
+router.get("/api/activity/user/:userId", activityController.getActivityByDate);
+router.get("/api/activity/:activityId", activityController.getActivityById);
 router.put("/api/activity", activityController.updateActivity)
 router.delete("/api/activity", activityController.deleteActivity)
+
 
 router.get("/api/category", categoryController.getAllCategories)
 

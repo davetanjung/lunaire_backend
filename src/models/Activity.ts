@@ -13,6 +13,7 @@ export interface UpdateActivityRequest {
     start_time?: string;
     end_time?: string;
     date?: string;
+    categoryId: number;
 }
 
 export interface DeleteActivityRequest {
@@ -43,6 +44,7 @@ export interface ReadUserActivitiesResponse {
         name: string;
     };
 }
+
 
 
   

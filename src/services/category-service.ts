@@ -2,6 +2,7 @@ import { prismaClient } from "../applications/database";
 import { CategoryResponse } from "../models/Category";
 
 export class categoryService {
+    
     static async getAllCategories(): Promise<CategoryResponse[]> {
             const categories = await prismaClient.category.findMany({
             });

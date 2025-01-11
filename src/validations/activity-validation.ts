@@ -16,6 +16,7 @@ export class activityValidation {
         start_time: z.string().min(1).max(50).optional(),
         end_time: z.string().min(1).max(100).optional(),
         date: z.string().min(1).max(100).optional(),
+        categoryId: z.number().positive().optional(),
     })
 
     static readonly DELETE: ZodType = z.object({
