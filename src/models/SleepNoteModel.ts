@@ -2,13 +2,14 @@ import { Diary } from "@prisma/client";
 
 export interface SleepNoteResponse {
     id: number;
+    entry_date: string;
     bed_time: string;
     wake_time: string;
-    sleep_hours: number;
+    sleep_hours: number;  // Misalnya, hitung selisih antara bed_time dan wake_time
     mood: string;
-    entry_date: string;
-    userId: number;
+    userId: number;  // ID pengguna yang memiliki catatan tidur ini
 }
+
 
 export function toSleepNoteResponseList(prismaDiary: Diary[]): SleepNoteResponse[] {
     return prismaDiary.map((diary) => {

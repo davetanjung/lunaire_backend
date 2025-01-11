@@ -8,15 +8,20 @@ import { SleepNoteService } from "../services/sleepnote-service";
 import { ResponseError } from "../error/response-error";
 
 export class SleepNoteController {
+
     static async getAllSleepNotes(req: Request, res: Response, next: NextFunction) {
         try {
-            const user = (req as any).user; // Assuming user is set in middleware
-            if (!user) {
-                throw new ResponseError(401, "Unauthorized");
+            // Pastikan userId ada dalam parameter URL
+            const userId: number = Number(req.params.userId);  // Ambil userId dari parameter
+    
+            // Cek apakah userId valid
+            if (!userId || isNaN(userId)) {
+                throw new ResponseError(400, "Invalid userId");
             }
-
-            const response: SleepNoteResponse[] = await SleepNoteService.getAllSleepNotes(user);
-
+    
+            // Panggil service untuk mendapatkan sleep notes berdasarkan userId
+            const response: SleepNoteResponse[] = await SleepNoteService.getAllSleepNotes(userId);
+    
             res.status(200).json({
                 data: response,
             });
@@ -24,48 +29,24 @@ export class SleepNoteController {
             next(error);
         }
     }
+    
+    
+    
 
-    static async getSleepNoteById(req: Request, res: Response, next: NextFunction) {
-        try {
-            const user = (req as any).user;
-            const { id } = req.params;
+    //controller
+static async createSleepNote(req: Request, res: Response, next: NextFunction) {
+    try {
+        const request: SleepNoteCreateRequest = req.body;  // Ambil data dari body request
+        const response: string = await SleepNoteService.createSleepNote(request); // Panggil service untuk membuat sleep note
 
-            if (!user) {
-                throw new ResponseError(401, "Unauthorized");
-            }
-
-            if (!id || isNaN(Number(id))) {
-                throw new ResponseError(400, "Invalid sleep note ID");
-            }
-
-            const response: SleepNoteResponse = await SleepNoteService.getSleepNote(user, Number(id));
-
-            res.status(200).json({
-                data: response,
-            });
-        } catch (error) {
-            next(error);
-        }
+        res.status(201).json({
+            data: response, // Kembalikan response dalam format JSON
+        });
+    } catch (error) {
+        next(error);  // Jika ada error, lemparkan ke error handler berikutnya
     }
+}
 
-    static async createSleepNote(req: Request, res: Response, next: NextFunction) {
-        try {
-            const user = (req as any).user;
-            const request: SleepNoteCreateRequest = req.body;
-
-            if (!user) {
-                throw new ResponseError(401, "Unauthorized");
-            }
-
-            const message: string = await SleepNoteService.createSleepNote(user, request);
-
-            res.status(201).json({
-                message: message,
-            });
-        } catch (error) {
-            next(error);
-        }
-    }
 
     static async updateSleepNoteById(req: Request, res: Response, next: NextFunction) {
         try {

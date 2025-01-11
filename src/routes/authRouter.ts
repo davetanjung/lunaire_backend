@@ -12,19 +12,13 @@ import { SleepNoteController } from "../controllers/sleepnoteController";
 
 const router = express.Router();
 
+//router sleep note
 export const sleepNoteRouter = express.Router();
 
-// Route untuk mendapatkan semua catatan tidur
-sleepNoteRouter.get("/api/getAllSleepNotes", SleepNoteController.getAllSleepNotes);
-// Route untuk mendapatkan catatan tidur berdasarkan ID
-sleepNoteRouter.get("/api/getSleepNoteById/:id", SleepNoteController.getSleepNoteById);
-// Route untuk membuat catatan tidur baru
-sleepNoteRouter.post("/api/createSleepNote", SleepNoteController.createSleepNote);
-// Route untuk memperbarui catatan tidur berdasarkan ID
-sleepNoteRouter.put("/api/updateSleepNoteById", SleepNoteController.updateSleepNoteById);
-// Route untuk menghapus catatan tidur berdasarkan ID
-sleepNoteRouter.delete("/api/deleteSleepNoteById/:id", SleepNoteController.deleteSleepNoteById);
-
+router.get("/api/sleepNote/:userId", SleepNoteController.getAllSleepNotes);
+router.post("/api/sleepNote", SleepNoteController.createSleepNote);
+router.put("/api/sleepNote", SleepNoteController.updateSleepNoteById);
+router.delete("/api/sleepNote/:id", SleepNoteController.deleteSleepNoteById);
 
 router.post("/api/register", authController.register);
 router.post("/login", authController.login);
