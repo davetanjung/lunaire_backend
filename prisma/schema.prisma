@@ -21,7 +21,7 @@ model User {
   token      String?    @db.VarChar(100)
   activities Activity[]
   sounds     Sound[]
-  diaries    Diary[]
+  diaries    Diary[] 
 
   @@map("users")
 }
